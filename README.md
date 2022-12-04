@@ -1,6 +1,6 @@
 # Glory Games App
 
-![alt text](https://github.com/H-Kann/Glory-Games-App/blob/master/UI.png)
+<img src="https://github.com/H-Kann/Glory-Games-App/blob/master/UI.png" width="600" height="500">
 Glory Games is a desktop application developed with C#. 
 The app manages the entries, and each entry is editable in a grid view. 
 
