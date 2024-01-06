@@ -1,6 +1,6 @@
 ﻿namespace gloryGames
 {
-    partial class Form1
+    partial class timer_Tick
     {
         /// <summary>
         ///  Required designer variable.
@@ -292,7 +292,7 @@
             this.N_D.Size = new System.Drawing.Size(33, 22);
             this.N_D.TabIndex = 14;
             this.N_D.UseVisualStyleBackColor = true;
-            this.N_D.Click += new System.EventHandler(this.N_D_Click);
+            this.N_D.Click += new System.EventHandler(this.L_D_Click);
             // 
             // metroStyleManager1
             // 

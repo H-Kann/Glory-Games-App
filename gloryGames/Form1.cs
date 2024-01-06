@@ -3,13 +3,13 @@ using System.Timers;
 
 namespace gloryGames
 {
-    public partial class Form1 : MetroFramework.Forms.MetroForm
+    public partial class timer_Tick : MetroFramework.Forms.MetroForm
     {
-        private int totalSeconds;
+        private int totalSeconds1;
         private int totalSeconds2;
         private int totalSeconds3;
         private int totalSeconds4;
-        public Form1()
+        public timer_Tick()
         {
             InitializeComponent();
             this.StyleManager = metroStyleManager1;
@@ -17,11 +17,9 @@ namespace gloryGames
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
             #region Device
-            cmbDevice.Items.Add("PS4_1");
-            cmbDevice.Items.Add("PS4_2");
-            cmbDevice.Items.Add("PS4_3");
-            cmbDevice.Items.Add("PS4_4");
+            cmbDevice.Items.AddRange(new string[] { "Console 1", "Console 2", "Console 3", "Console 4" });
             #endregion
 
             #region Game Type
@@ -29,7 +27,7 @@ namespace gloryGames
             #endregion
 
             #region Duration
-            cmbDuration.Items.AddRange(new string[] { "15min","20min","30min", "1H","1H30min","2H","2H30min","3H","3H30min","4H","4H30min","5H" });
+            cmbDuration.Items.AddRange(new string[] { "15min","20min","30min", "1 Hour","1H30min","2 Hours","2H30min", "3 Hours", "3H30min", "4 Hours", "4H30min", "5 Hours" });
             #endregion
 
             #region Game Status
@@ -37,10 +35,12 @@ namespace gloryGames
             #endregion
 
             #region Timer Status
-            lblonoff1.Text = "off";
-            lblonoff2.Text = "off";
-            lblonoff3.Text = "off";
-            lblonoff4.Text = "off";
+
+            var labels = new List<Label> { lblonoff1, lblonoff2, lblonoff3, lblonoff4 };
+            foreach (var label in labels)
+            {
+                label.Text = "off";
+            }
             #endregion
 
             notifyIcon1.Icon = SystemIcons.Information;
@@ -48,13 +48,12 @@ namespace gloryGames
 
             #region GridView
             table.ColumnCount = 6;
+            String[] tabelHeader = { "Date", "Device Number","Device Type", "Game Status","Duration","Amount Paid"};
 
-            table.Columns[0].Name = "Date";
-            table.Columns[1].Name = "Device Number";
-            table.Columns[2].Name = "Device Type";
-            table.Columns[3].Name = "Game Status";
-            table.Columns[4].Name = "Duration";
-            table.Columns[5].Name = "Amount Paid";
+            for(int i=0; i < 6; i++)
+            {
+                table.Columns[i].Name = tabelHeader[i];
+            }
 
 
             table.Columns[4].DefaultCellStyle.Format = "hh:mm";
@@ -71,9 +70,10 @@ namespace gloryGames
 
       
 
-        #region Day/Night
-        private void N_D_Click(object sender, EventArgs e)
+        #region Light Mode/Dark Mode
+        private void L_D_Click(object sender, EventArgs e)
         {
+            var labels = new List<Label> { label1, label2, label3, label4, label5, label7, label8, label9, label10, lblDevice1, lblDevice2, lblDevice3, lblDevice4 };
             if (metroStyleManager1.Theme == MetroFramework.MetroThemeStyle.Dark)
             {
                 metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -93,23 +93,12 @@ namespace gloryGames
                 pictureBox1.Refresh();
 
                 #region Labels
-                label1.ForeColor = Color.Black;
-                label2.ForeColor = Color.Black;
-                label3.ForeColor = Color.Black;
-                label4.ForeColor = Color.Black;
-                label5.ForeColor = Color.Black;
 
-                label7.ForeColor = Color.Black;
-                label8.ForeColor = Color.Black;
-                label9.ForeColor = Color.Black;
-                label10.ForeColor = Color.Black;
-
-                lblDevice1.ForeColor = Color.Black;
-                lblDevice2.ForeColor = Color.Black;
-                lblDevice3.ForeColor = Color.Black;
-                lblDevice4.ForeColor = Color.Black;
+                foreach (var label in labels)
+                {
+                    label.ForeColor = Color.Black;
+                }
                 #endregion
-
 
             }
             else
@@ -132,22 +121,10 @@ namespace gloryGames
 
 
                 #region Labels
-                label1.ForeColor = Color.White;
-                label2.ForeColor = Color.White;
-                label3.ForeColor = Color.White;
-                label4.ForeColor = Color.White;
-                label5.ForeColor = Color.White;
-
-                label7.ForeColor = Color.White;
-                label8.ForeColor = Color.White;
-                label9.ForeColor = Color.White;
-                label10.ForeColor = Color.White;
-
-                lblDevice1.ForeColor = Color.White;
-                lblDevice2.ForeColor = Color.White;
-                lblDevice3.ForeColor = Color.White;
-                lblDevice4.ForeColor = Color.White;
-
+                foreach ( var label in labels )
+                {
+                    label.ForeColor = Color.White;
+                }
                 #endregion
 
             }
@@ -188,7 +165,7 @@ namespace gloryGames
         }
         #endregion
 
-        #region button Export
+        #region Export Button
         private void btnExport_Click(object sender, EventArgs e)
         {
             // creating Excel Application  
@@ -196,9 +173,9 @@ namespace gloryGames
             // creating new WorkBook within Excel application  
             Microsoft.Office.Interop.Excel._Workbook workbook = app.Workbooks.Add(Type.Missing);
             // creating new Excelsheet in workbook  
-            Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+            Microsoft.Office.Interop.Excel._Worksheet? worksheet = null;
             // see the excel sheet behind the program  
-            app.Visible = true;
+            app.Visible = false;
             // get the reference of first sheet. By default its name is Sheet1.  
             // store its reference to worksheet  
             worksheet = workbook.Sheets["Sheet1"];
@@ -309,15 +286,9 @@ namespace gloryGames
         
 
         #region Prerequisites
-        DateTime starttime1;
-        DateTime starttime2;
-        DateTime starttime3;
-        DateTime starttime4;
-        DateTime stoptime1;
-        DateTime stoptime2;
-        DateTime stoptime3;
-        DateTime stoptime4;
-        
+        DateTime starttime1, starttime2, starttime3, starttime4;
+       
+        DateTime stoptime1, stoptime2, stoptime3, stoptime4;
         #endregion
 
         
@@ -325,574 +296,110 @@ namespace gloryGames
         #region Start1
         private void btnStartDevice1_Click(object sender, EventArgs e)
         {
-            int num= cmbDuration.SelectedIndex;
-            switch (num)
-            {
-                case 0:
-
-                    totalSeconds = 900;
-                    timer1.Enabled = true;
-                    break;
-
-                case 1:
-
-                    totalSeconds = 1200;
-                    timer1.Enabled = true;
-                    break;
-
-                case 2:
-
-                    totalSeconds = 1800;
-                    timer1.Enabled = true;
-                    break;
-
-                case 3:
-
-                    totalSeconds = 3600;
-                    timer1.Enabled = true;
-                    break;
-
-                case 4:
-
-                    totalSeconds = 5400;
-                    timer1.Enabled = true;
-                    break;
-
-                case 5:
-
-                    totalSeconds = 7200;
-                    timer1.Enabled = true;
-                    break;
-
-                case 6:
-
-                    totalSeconds = 9000;
-                    timer1.Enabled = true;
-                    break;
-
-                case 7:
-
-                    totalSeconds = 10800;
-                    timer1.Enabled = true;
-                    break;
-
-                case 8:
-
-                    totalSeconds = 12600;
-                    timer1.Enabled = true;
-                    break;
-
-                case 9:
-
-                    totalSeconds = 14400;
-                    timer1.Enabled = true;
-                    break;
-
-                case 10:
-
-                    totalSeconds = 16200;
-                    timer1.Enabled = true;
-                    break;
-
-                case 11:
-
-                    totalSeconds = 18000;
-                    timer1.Enabled = true;
-                    break;
-            }
-            
-            lblonoff1.Text = "on";
-            lblDevice1.ForeColor = Color.Green;
-            btnStartDevice1.Enabled = false;
+            totalSeconds1 = AppTimer.timerStart(cmbDuration, timer1, lblonoff1, lblDevice1, btnStartDevice1);
         }
 
         #endregion
+
+
 
         #region Start2
         private void btnStartDevice2_Click(object sender, EventArgs e)
         {
-            int num = cmbDuration.SelectedIndex;
-            switch (num)
-            {
-                case 0:
-
-                    totalSeconds2 = 900;
-                    timer2.Enabled = true;
-                    break;
-
-                case 1:
-
-                    totalSeconds2 = 1200;
-                    timer2.Enabled = true;
-                    break;
-
-                case 2:
-
-                    totalSeconds2 = 1800;
-                    timer2.Enabled = true;
-                    break;
-
-                case 3:
-
-                    totalSeconds2 = 3600;
-                    timer2.Enabled = true;
-                    break;
-
-                case 4:
-
-                    totalSeconds2 = 5400;
-                    timer2.Enabled = true;
-                    break;
-
-                case 5:
-
-                    totalSeconds2 = 7200;
-                    timer2.Enabled = true;
-                    break;
-
-                case 6:
-
-                    totalSeconds2 = 9000;
-                    timer2.Enabled = true;
-                    break;
-
-                case 7:
-
-                    totalSeconds2 = 10800;
-                    timer2.Enabled = true;
-                    break;
-
-                case 8:
-
-                    totalSeconds2 = 12600;
-                    timer2.Enabled = true;
-                    break;
-
-                case 9:
-
-                    totalSeconds2 = 14400;
-                    timer2.Enabled = true;
-                    break;
-
-                case 10:
-
-                    totalSeconds2 = 16200;
-                    timer2.Enabled = true;
-                    break;
-
-                case 11:
-
-                    totalSeconds2 = 18000;
-                    timer2.Enabled = true;
-                    break;
-            }
-            
-            lblonoff2.Text = "on";
-            lblDevice2.ForeColor = Color.Green;
-            btnStartDevice2.Enabled = false;
+            totalSeconds2 = AppTimer.timerStart(cmbDuration, timer2, lblonoff2, lblDevice2, btnStartDevice2);
         }
 
         #endregion
+
+
 
         #region Start3
         private void btnStartDevice3_Click(object sender, EventArgs e)
         {
-
-            int num = cmbDuration.SelectedIndex;
-            switch (num)
-            {
-                case 0:
-
-                    totalSeconds3 = 900;
-                    timer3.Enabled = true;
-                    break;
-
-                case 1:
-
-                    totalSeconds3 = 1200;
-                    timer3.Enabled = true;
-                    break;
-
-                case 2:
-
-                    totalSeconds3 = 1800;
-                    timer3.Enabled = true;
-                    break;
-
-                case 3:
-
-                    totalSeconds3 = 3600;
-                    timer3.Enabled = true;
-                    break;
-
-                case 4:
-
-                    totalSeconds3 = 5400;
-                    timer3.Enabled = true;
-                    break;
-
-                case 5:
-
-                    totalSeconds3 = 7200;
-                    timer3.Enabled = true;
-                    break;
-
-                case 6:
-
-                    totalSeconds3 = 9000;
-                    timer3.Enabled = true;
-                    break;
-
-                case 7:
-
-                    totalSeconds3 = 10800;
-                    timer3.Enabled = true;
-                    break;
-
-                case 8:
-
-                    totalSeconds3 = 12600;
-                    timer3.Enabled = true;
-                    break;
-
-                case 9:
-
-                    totalSeconds3 = 14400;
-                    timer3.Enabled = true;
-                    break;
-
-                case 10:
-
-                    totalSeconds3 = 16200;
-                    timer3.Enabled = true;
-                    break;
-
-                case 11:
-
-                    totalSeconds3 = 18000;
-                    timer3.Enabled = true;
-                    break;
-            }
-            lblonoff3.Text = "on";
-            btnStartDevice3.Enabled = false;
-            lblDevice3.ForeColor = Color.Green;
+            totalSeconds3 = AppTimer.timerStart(cmbDuration, timer3, lblonoff3, lblDevice3, btnStartDevice3);
         }
 
         #endregion
+
+
 
         #region Start4
         private void btnStartDevice4_Click(object sender, EventArgs e)
         {
-            int num = cmbDuration.SelectedIndex;
-            switch (num)
-            {
-                case 0:
-
-                    totalSeconds4 = 900;
-                    timer4.Enabled = true;
-                    break;
-
-                case 1:
-
-                    totalSeconds4 = 1200;
-                    timer4.Enabled = true;
-                    break;
-
-                case 2:
-
-                    totalSeconds4 = 1800;
-                    timer4.Enabled = true;
-                    break;
-
-                case 3:
-
-                    totalSeconds4 = 3600;
-                    timer4.Enabled = true;
-                    break;
-
-                case 4:
-
-                    totalSeconds4 = 5400;
-                    timer4.Enabled = true;
-                    break;
-
-                case 5:
-
-                    totalSeconds4 = 7200;
-                    timer4.Enabled = true;
-                    break;
-
-                case 6:
-
-                    totalSeconds4 = 9000;
-                    timer4.Enabled = true;
-                    break;
-
-                case 7:
-
-                    totalSeconds4 = 10800;
-                    timer4.Enabled = true;
-                    break;
-
-                case 8:
-
-                    totalSeconds4 = 12600;
-                    timer4.Enabled = true;
-                    break;
-
-                case 9:
-
-                    totalSeconds4 = 14400;
-                    timer4.Enabled = true;
-                    break;
-
-                case 10:
-
-                    totalSeconds4 = 16200;
-                    timer4.Enabled = true;
-                    break;
-
-                case 11:
-
-                    totalSeconds4 = 18000;
-                    timer4.Enabled = true;
-                    break;
-            }
-            lblonoff4.Text = "on";
-            btnStartDevice4.Enabled = false;
-            lblDevice4.ForeColor = Color.Green;
+            totalSeconds4 = AppTimer.timerStart(cmbDuration, timer4, lblonoff4, lblDevice4, btnStartDevice4);
         }
         #endregion
+
+
 
         #region Pause
         private void btnPauseDevice1_Click(object sender, EventArgs e)
         {
-            if (lblonoff1.Text == "on")
-            {
-                timer1.Stop();
-                stoptime1 = DateTime.Now;
-                lblonoff1.Text = "p";
-                lblDevice1.ForeColor = Color.RoyalBlue;
-            }
-            else if (lblonoff1.Text == "p")
-            {
-                starttime1 += (DateTime.Now - stoptime1);
-
-                timer1.Start();
-                lblonoff1.Text = "on";
-                lblDevice1.ForeColor = Color.Green;
-            }
-
+            AppTimer.timerPause(lblonoff1, timer1, stoptime1, lblDevice1, starttime1);
         }
 
         private void btnPauseDevice2_Click(object sender, EventArgs e)
         {
-            if (lblonoff2.Text == "on")
-            {
-                timer2.Stop();
-                stoptime2 = DateTime.Now;
-                lblonoff2.Text = "p";
-                lblDevice2.ForeColor = Color.RoyalBlue;
-            }
-            else if (lblonoff2.Text == "p")
-            {
-                starttime2 += (DateTime.Now - stoptime2);
-
-                timer2.Start();
-                lblonoff2.Text = "on";
-                lblDevice2.ForeColor = Color.Green;
-            }
+            AppTimer.timerPause(lblonoff2, timer2, stoptime2, lblDevice2, starttime2);
         }
 
         private void btnPauseDevice3_Click(object sender, EventArgs e)
         {
-            if (lblonoff3.Text == "on")
-            {
-                timer3.Stop();
-                stoptime3 = DateTime.Now;
-                lblonoff3.Text = "p";
-                lblDevice3.ForeColor = Color.RoyalBlue;
-            }
-            else if (lblonoff3.Text == "p")
-            {
-                starttime3 += (DateTime.Now - stoptime3);
-
-                timer3.Start();
-                lblonoff3.Text = "on";
-                lblDevice3.ForeColor = Color.Green;
-            }
+            AppTimer.timerPause(lblonoff3, timer3, stoptime3, lblDevice3, starttime3);
         }
 
         private void btnPauseDevice4_Click(object sender, EventArgs e)
         {
-            if (lblonoff4.Text == "on")
-            {
-                timer4.Stop();
-                stoptime4 = DateTime.Now;
-                lblonoff4.Text = "p";
-                lblDevice4.ForeColor = Color.RoyalBlue;
-            }
-            else if (lblonoff4.Text == "p")
-            {
-                starttime4 += (DateTime.Now - stoptime4);
-
-                timer4.Start();
-                lblonoff4.Text = "on";
-                lblDevice4.ForeColor = Color.Green;
-            }
+            AppTimer.timerPause(lblonoff4, timer4, stoptime4, lblDevice4, starttime4);
         }
         #endregion
 
         #region Stop
         private void btnStopDevice1_Click(object sender, EventArgs e)
         {
-            timer1.Stop();
-            totalSeconds = 0;
-            TimeSpan t = TimeSpan.FromSeconds(totalSeconds);
-            lblDevice1.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-            btnStartDevice1.Enabled = true;
-            lblonoff1.Text = "off";
-            notifyIcon1.ShowBalloonTip(1000, "Post 1", "Finished Playing",ToolTipIcon.Info);
-            lblDevice1.ForeColor = Color.Red;
-                
+            AppTimer.timerStop(timer1, totalSeconds1, lblDevice1, btnStartDevice1, lblonoff1, notifyIcon1);
         }
 
         private void btnStopDevice2_Click(object sender, EventArgs e)
         {
-            timer2.Stop();
-            totalSeconds2 = 0;
-            TimeSpan t = TimeSpan.FromSeconds(totalSeconds2);
-            lblDevice2.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-            btnStartDevice2.Enabled = true;
-            lblonoff2.Text = "off";
-            notifyIcon1.ShowBalloonTip(1000, "Post 2", "Finished Playing", ToolTipIcon.Info);
-            lblDevice2.ForeColor = Color.Red;
-
+            AppTimer.timerStop(timer2, totalSeconds2, lblDevice2, btnStartDevice2, lblonoff2, notifyIcon1);
         }
 
         private void btnStopDevice3_Click(object sender, EventArgs e)
         {
-            timer3.Stop();
-            totalSeconds3 = 0;
-            TimeSpan t = TimeSpan.FromSeconds(totalSeconds3);
-            lblDevice3.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-            btnStartDevice3.Enabled = true;
-            lblonoff3.Text = "off";
-            notifyIcon1.ShowBalloonTip(1000, "Post 3", "Finished Playing", ToolTipIcon.Info);
-            lblDevice3.ForeColor = Color.Red;
-
+            AppTimer.timerStop(timer3, totalSeconds3, lblDevice3, btnStartDevice3, lblonoff3, notifyIcon1);
         }
 
         private void btnStopDevice4_Click(object sender, EventArgs e)
         {
-            timer4.Stop();
-            totalSeconds4 = 0;
-            TimeSpan t = TimeSpan.FromSeconds(totalSeconds4);
-            lblDevice4.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-            btnStartDevice4.Enabled = true;
-            lblonoff4.Text = "off";
-            notifyIcon1.ShowBalloonTip(1000, "Post 4", "Finished Playing", ToolTipIcon.Info);
-            lblDevice4.ForeColor = Color.Red;
-
+            AppTimer.timerStop(timer4, totalSeconds4, lblDevice4, btnStartDevice4, lblonoff4, notifyIcon1);
         }
         #endregion
 
         #region Ticks
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (totalSeconds > 0)
-            {
-                totalSeconds--;
-
-                TimeSpan t = TimeSpan.FromSeconds(totalSeconds);
-                lblDevice1.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-            }
-            else
-            {
-                timer1.Stop();
-                timer1.Enabled = false;
-
-                TimeSpan t = TimeSpan.FromSeconds(totalSeconds);
-                lblDevice1.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-                btnStartDevice1.Enabled = true;
-                lblonoff1.Text = "off";
-                notifyIcon1.ShowBalloonTip(1000, "Post 1", "Finished Playing", ToolTipIcon.Info);
-
-                notifyIcon1.Visible = true;
-            }
+            totalSeconds1 = AppTimer.timerTick(lblDevice1, totalSeconds1, btnStartDevice1, lblonoff1, notifyIcon1, timer1);
         }
+        
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            if (totalSeconds2 > 0)
-            {
-                totalSeconds2--;
-
-                TimeSpan t = TimeSpan.FromSeconds(totalSeconds2);
-                lblDevice2.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-            }
-            else
-            {
-                timer2.Stop();
-                timer2.Enabled = false;
-
-                TimeSpan t = TimeSpan.FromSeconds(totalSeconds2);
-                lblDevice2.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-                btnStartDevice2.Enabled = true;
-                lblonoff2.Text = "off";
-                notifyIcon1.ShowBalloonTip(1000, "Post 2", "Finished Playing", ToolTipIcon.Info);
-
-                notifyIcon1.Visible = true;
-            }
+            totalSeconds2 = AppTimer.timerTick(lblDevice2, totalSeconds2, btnStartDevice2, lblonoff2, notifyIcon1, timer2);
         }
+
 
         private void timer3_Tick(object sender, EventArgs e)
         {
-            if (totalSeconds3 > 0)
-            {
-                totalSeconds3--;
-
-                TimeSpan t = TimeSpan.FromSeconds(totalSeconds3);
-                lblDevice3.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-            }
-            else
-            {
-                timer3.Stop();
-                timer3.Enabled = false;
-
-                TimeSpan t = TimeSpan.FromSeconds(totalSeconds3);
-                lblDevice3.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-                btnStartDevice3.Enabled = true;
-                lblonoff3.Text = "off";
-                notifyIcon1.ShowBalloonTip(1000, "Post 3", "Finished Playing", ToolTipIcon.Info);
-
-                notifyIcon1.Visible = true;
-            }
+            totalSeconds3 = AppTimer.timerTick(lblDevice3, totalSeconds3, btnStartDevice3, lblonoff3, notifyIcon1, timer3);
         }
+
 
         private void timer4_Tick(object sender, EventArgs e)
         {
-            if (totalSeconds4 > 0)
-            {
-                totalSeconds4--;
-
-                TimeSpan t = TimeSpan.FromSeconds(totalSeconds4);
-                lblDevice4.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-            }
-            else
-            {
-                timer4.Stop();
-                timer4.Enabled = false;
-
-                TimeSpan t = TimeSpan.FromSeconds(totalSeconds4);
-                lblDevice4.Text = String.Format("{0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-                btnStartDevice4.Enabled = true;
-                lblonoff4.Text = "off";
-                notifyIcon1.ShowBalloonTip(1000, "Post 4", "Finished Playing", ToolTipIcon.Info);
-
-                notifyIcon1.Visible = true;
-            }
+            totalSeconds4 = AppTimer.timerTick(lblDevice4, totalSeconds4, btnStartDevice4, lblonoff4, notifyIcon1, timer4);
         }
+
         #endregion
 
         #region Add Action
@@ -960,7 +467,7 @@ namespace gloryGames
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
                         break;
 
-                    case "1H":
+                    case "1 Hour":
 
                         ts = new TimeSpan(1, 0, 0);
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
@@ -972,7 +479,7 @@ namespace gloryGames
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
                         break;
 
-                    case "2H":
+                    case "2 Hours":
 
                         ts = new TimeSpan(2, 0, 0);
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
@@ -984,7 +491,7 @@ namespace gloryGames
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
                         break;
 
-                    case "3H":
+                    case "3 Hours":
 
                         ts = new TimeSpan(3, 0, 0);
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
@@ -996,7 +503,7 @@ namespace gloryGames
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
                         break;
 
-                    case "4H":
+                    case "4 Hours":
 
                         ts = new TimeSpan(4, 0, 0);
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
@@ -1008,7 +515,7 @@ namespace gloryGames
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
                         break;
 
-                    case "5H":
+                    case "5 Hours":
 
                         ts = new TimeSpan(5, 0, 0);
                         row.Cells[4].Value = string.Format("{0:hh\\:mm}", ts);
